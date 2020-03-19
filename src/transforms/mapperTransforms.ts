@@ -104,7 +104,8 @@ export function transformMapper({ schema, options }: MapperInput) {
     transformBinaryMapper,
     transformObjectMapper,
     transformArrayMapper,
-    transformDictionaryMapper
+    transformDictionaryMapper,
+    transformAnyMapper
   );
   const { mapper } = processMapper({ schema, options });
 
@@ -539,6 +540,22 @@ function transformNumberMapper(pipelineValue: PipelineValue): PipelineValue {
     { name: MapperType.Number },
     options
   );
+
+  return {
+    schema,
+    mapper,
+    isHandled: true
+  };
+}
+
+function transformAnyMapper(pipelineValue: PipelineValue): PipelineValue {
+  const { schema, options } = pipelineValue;
+
+  if (!isSchemaType([SchemaType.Any], schema)) {
+    return pipelineValue;
+  }
+
+  const mapper: BaseMapper = buildMapper(schema, { name: "any" }, options);
 
   return {
     schema,

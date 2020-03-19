@@ -26,6 +26,9 @@ export function getTypeForSchema(schema: Schema): TypeDetails {
   let kind: PropertyKind = PropertyKind.Primitive;
 
   switch (schema.type) {
+    case SchemaType.Any:
+      typeName = "any";
+      break;
     case SchemaType.Array:
       const arraySchema = schema as ArraySchema;
       const itemsType = getTypeForSchema(arraySchema.elementType);
